@@ -4,29 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Nuages de Mots</title>
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
     <style>
-        #wordcloud {
-            width: 800px;
-            height: 500px;
-            border: 1px solid #ddd;
-            margin: 20px auto;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #F7F7F7;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: rgb(38, 30, 72); /* Violet foncé EPSI */
+            font-weight: 600;
+            margin-top: 20px;
         }
         textarea {
             width: 80%;
-            height: 100px;
-            margin: 10px auto;
+            height: 120px;
+            margin: 20px auto;
             display: block;
+            border: 2px solid rgb(54, 182, 212); /* Bleu clair EPSI */
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+            color: rgb(75, 75, 153); /* Bleu foncé EPSI */
         }
         button {
             display: block;
-            margin: 10px auto;
+            margin: 20px auto;
             padding: 10px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background-color: rgb(217, 71, 89); /* Rouge EPSI */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: rgb(228, 128, 62); /* Orange clair EPSI */
+        }
+        #wordcloud {
+            width: 80%;
+            height: 500px;
+            margin: 20px auto;
+            border: 1px solid rgb(143, 190, 84); /* Vert EPSI */
+            background-color: white;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">Générateur de Nuages de Mots</h1>
+    <h1>Générateur de Nuages de Mots</h1>
     <textarea id="text-input" placeholder="Collez ou saisissez vos mots ici..."></textarea>
     <button onclick="generateWordCloud()">Générer le Nuage</button>
     <div id="wordcloud"></div>
@@ -45,10 +77,12 @@
                 list: wordArray,
                 gridSize: 10,
                 weightFactor: 10,
-                color: 'random-dark',
+                color: function() {
+                    return ['rgb(54, 182, 212)', 'rgb(75, 75, 153)', 'rgb(38, 30, 72)', 'rgb(250, 207, 83)'][Math.floor(Math.random() * 4)];
+                },
                 rotateRatio: 0.5,
                 rotationSteps: 2,
-                backgroundColor: '#f7f7f7'
+                backgroundColor: '#ffffff'
             });
         }
     </script>
