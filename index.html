@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Nuages de Mots</title>
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+    <style>
+        #wordcloud {
+            width: 800px;
+            height: 500px;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin: 10px auto;
+            display: block;
+        }
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Générateur de Nuages de Mots</h1>
+    <textarea id="text-input" placeholder="Collez ou saisissez vos mots ici..."></textarea>
+    <button onclick="generateWordCloud()">Générer le Nuage</button>
+    <div id="wordcloud"></div>
+
+    <script>
+        function generateWordCloud() {
+            const inputText = document.getElementById('text-input').value;
+            const words = inputText.split(/\s+/).reduce((acc, word) => {
+                acc[word] = (acc[word] || 0) + 1;
+                return acc;
+            }, {});
+
+            const wordArray = Object.entries(words).map(([text, weight]) => [text, weight]);
+
+            WordCloud(document.getElementById('wordcloud'), {
+                list: wordArray,
+                gridSize: 10,
+                weightFactor: 10,
+                color: 'random-dark',
+                rotateRatio: 0.5,
+                rotationSteps: 2,
+                backgroundColor: '#f7f7f7'
+            });
+        }
+    </script>
+</body>
+</html>
