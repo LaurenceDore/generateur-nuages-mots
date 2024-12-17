@@ -13,6 +13,8 @@
             background-color: #F7F7F7;
             margin: 0;
             padding: 0;
+            position: relative;
+            overflow: hidden;
         }
         h1 {
             text-align: center;
@@ -84,7 +86,15 @@
                 rotationSteps: 2,
                 backgroundColor: '#ffffff'
             });
+
+            // Ajuste dynamiquement la taille de l'iframe
+            window.parent.postMessage({ height: document.body.scrollHeight }, '*');
         }
+
+        // Envoyer la hauteur initiale
+        window.onload = function () {
+            window.parent.postMessage({ height: document.body.scrollHeight }, '*');
+        };
     </script>
 </body>
 </html>
