@@ -8,34 +8,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
     <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #F7F7F7;
+        /* Assure que tout le contenu tient dans la page */
+        html, body {
             margin: 0;
             padding: 0;
-            position: relative;
-            overflow: hidden;
+            height: 100%;
+            background-color: #F7F7F7;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Évite les barres de défilement */
         }
+
         h1 {
             text-align: center;
             color: rgb(38, 30, 72); /* Violet foncé EPSI */
             font-weight: 600;
-            margin-top: 20px;
+            margin: 20px 0;
         }
+
         textarea {
             width: 80%;
             height: 120px;
-            margin: 20px auto;
+            margin: 10px auto;
             display: block;
             border: 2px solid rgb(54, 182, 212); /* Bleu clair EPSI */
             border-radius: 5px;
             padding: 10px;
             font-size: 1rem;
             color: rgb(75, 75, 153); /* Bleu foncé EPSI */
+            box-sizing: border-box;
         }
+
         button {
             display: block;
-            margin: 20px auto;
+            margin: 10px auto;
             padding: 10px 20px;
             font-size: 1.1rem;
             font-weight: 600;
@@ -46,16 +51,20 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: rgb(228, 128, 62); /* Orange clair EPSI */
         }
+
+        /* Le conteneur pour le nuage de mots */
         #wordcloud {
             width: 80%;
-            height: 500px;
+            height: calc(100vh - 250px); /* S'adapte à la hauteur totale visible */
             margin: 20px auto;
-            border: 1px solid rgb(143, 190, 84); /* Vert EPSI */
+            border: 2px solid rgb(143, 190, 84); /* Vert EPSI */
             background-color: white;
             border-radius: 10px;
+            box-sizing: border-box; /* Inclus la bordure dans la taille */
         }
     </style>
 </head>
@@ -66,6 +75,7 @@
     <div id="wordcloud"></div>
 
     <script>
+        // Génération du nuage de mots
         function generateWordCloud() {
             const inputText = document.getElementById('text-input').value;
             const words = inputText.split(/\s+/).reduce((acc, word) => {
@@ -87,14 +97,20 @@
                 backgroundColor: '#ffffff'
             });
 
-            // Ajuste dynamiquement la taille de l'iframe
-            window.parent.postMessage({ height: document.body.scrollHeight }, '*');
+            // Ajuster la hauteur de l'iframe
+            sendHeightToParent();
         }
 
-        // Envoyer la hauteur initiale
-        window.onload = function () {
-            window.parent.postMessage({ height: document.body.scrollHeight }, '*');
-        };
+        // Fonction pour envoyer la hauteur au parent (iframe)
+        function sendHeightToParent() {
+            window.parent.postMessage({ height: document.documentElement.scrollHeight }, '*');
+        }
+
+        // Envoyer la hauteur initiale après chargement
+        window.onload = sendHeightToParent;
+
+        // Envoyer la nouvelle hauteur si la fenêtre est redimensionnée
+        window.onresize = sendHeightToParent;
     </script>
 </body>
 </html>
