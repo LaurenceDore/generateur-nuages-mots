@@ -15,6 +15,7 @@
             height: 100%;
             background-color: #F7F7F7;
             font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Empêche les barres de défilement */
         }
 
         h1 {
@@ -55,14 +56,26 @@
             background-color: rgb(228, 128, 62); /* Orange EPSI */
         }
 
+        /* Le conteneur pour le nuage de mots */
         #wordcloud {
             width: 80%;
-            height: calc(100vh - 250px); /* Responsive height */
+            height: calc(100vh - 250px); /* Utilisation de toute la hauteur visible */
             margin: 20px auto;
             border: 2px solid rgb(143, 190, 84); /* Vert EPSI */
             background-color: white;
             border-radius: 10px;
             box-sizing: border-box;
+        }
+
+        /* Ajustement pour éviter les coupures dans l'iframe */
+        @media (max-height: 600px) {
+            textarea {
+                height: 100px; /* Taille réduite pour petits écrans */
+            }
+
+            #wordcloud {
+                height: calc(100vh - 200px); /* Ajustement dynamique */
+            }
         }
     </style>
 </head>
