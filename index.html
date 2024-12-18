@@ -59,7 +59,7 @@
         /* Le conteneur pour le nuage de mots */
         #wordcloud {
             width: 80%;
-            height: calc(100vh - 250px); /* Ajuste la hauteur pour éviter la coupure */
+            height: calc(100vh - 250px); /* Utilisation de toute la hauteur visible */
             margin: 10px auto;
             border: 2px solid rgb(143, 190, 84); /* Vert EPSI */
             background-color: white;
@@ -108,12 +108,16 @@
             // Affichage du nuage de mots
             WordCloud(document.getElementById('wordcloud'), {
                 list: wordArray,
-                gridSize: 10,
-                weightFactor: 10,
+                gridSize: 8, /* Espacement optimal des mots */
+                weightFactor: function(size) {
+                    return Math.min(20, 10 + size); /* Limite la taille maximale des mots */
+                },
+                maxFontSize: 50, /* Taille maximale des mots */
+                minFontSize: 10, /* Taille minimale des mots */
                 color: function() {
                     return ['rgb(54, 182, 212)', 'rgb(75, 75, 153)', 'rgb(38, 30, 72)', 'rgb(250, 207, 83)'][Math.floor(Math.random() * 4)];
                 },
-                rotateRatio: 0.5,
+                rotateRatio: 0.3, /* Réduit les mots inclinés pour une meilleure lisibilité */
                 rotationSteps: 2,
                 backgroundColor: '#ffffff'
             });
