@@ -8,19 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
     <style>
-        /* Assure que tout le contenu tient dans la page */
+        /* Charte EPSI et responsive design */
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             background-color: #F7F7F7;
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Évite les barres de défilement */
         }
 
         h1 {
             text-align: center;
-            color: rgb(38, 30, 72); /* Violet foncé EPSI */
+            color: rgb(38, 30, 72); /* Violet EPSI */
             font-weight: 600;
             margin: 20px 0;
         }
@@ -30,7 +29,7 @@
             height: 120px;
             margin: 10px auto;
             display: block;
-            border: 2px solid rgb(54, 182, 212); /* Bleu clair EPSI */
+            border: 2px solid rgb(54, 182, 212); /* Bleu EPSI */
             border-radius: 5px;
             padding: 10px;
             font-size: 1rem;
@@ -53,18 +52,17 @@
         }
 
         button:hover {
-            background-color: rgb(228, 128, 62); /* Orange clair EPSI */
+            background-color: rgb(228, 128, 62); /* Orange EPSI */
         }
 
-        /* Le conteneur pour le nuage de mots */
         #wordcloud {
             width: 80%;
-            height: calc(100vh - 250px); /* S'adapte à la hauteur totale visible */
+            height: calc(100vh - 250px); /* Responsive height */
             margin: 20px auto;
             border: 2px solid rgb(143, 190, 84); /* Vert EPSI */
             background-color: white;
             border-radius: 10px;
-            box-sizing: border-box; /* Inclus la bordure dans la taille */
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -75,16 +73,36 @@
     <div id="wordcloud"></div>
 
     <script>
-        // Génération du nuage de mots
+        // Fonction pour sauvegarder les mots dans le LocalStorage
+        function saveWords(words) {
+            localStorage.setItem('savedWords', JSON.stringify(words));
+        }
+
+        // Fonction pour charger les mots depuis le LocalStorage
+        function loadWords() {
+            return JSON.parse(localStorage.getItem('savedWords')) || [];
+        }
+
+        // Fonction pour générer le nuage de mots
         function generateWordCloud() {
             const inputText = document.getElementById('text-input').value;
-            const words = inputText.split(/\s+/).reduce((acc, word) => {
+            let savedWords = loadWords();
+
+            // Ajouter les nouveaux mots
+            if (inputText) {
+                const newWords = inputText.split(/\s+/);
+                savedWords = savedWords.concat(newWords);
+                saveWords(savedWords); // Sauvegarder
+            }
+
+            const wordCounts = savedWords.reduce((acc, word) => {
                 acc[word] = (acc[word] || 0) + 1;
                 return acc;
             }, {});
 
-            const wordArray = Object.entries(words).map(([text, weight]) => [text, weight]);
+            const wordArray = Object.entries(wordCounts).map(([text, weight]) => [text, weight]);
 
+            // Affichage du nuage de mots
             WordCloud(document.getElementById('wordcloud'), {
                 list: wordArray,
                 gridSize: 10,
@@ -96,21 +114,12 @@
                 rotationSteps: 2,
                 backgroundColor: '#ffffff'
             });
-
-            // Ajuster la hauteur de l'iframe
-            sendHeightToParent();
         }
 
-        // Fonction pour envoyer la hauteur au parent (iframe)
-        function sendHeightToParent() {
-            window.parent.postMessage({ height: document.documentElement.scrollHeight }, '*');
-        }
-
-        // Envoyer la hauteur initiale après chargement
-        window.onload = sendHeightToParent;
-
-        // Envoyer la nouvelle hauteur si la fenêtre est redimensionnée
-        window.onresize = sendHeightToParent;
+        // Charger les mots sauvegardés au démarrage
+        window.onload = function() {
+            generateWordCloud();
+        };
     </script>
 </body>
 </html>
